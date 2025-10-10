@@ -6,7 +6,23 @@
     </div>
 
     <!-- Tabela de contatos -->
-    <div class="container-sm mb-4 w-70" id="divContatos">
+    <div class="container-sm mb-4 w-75" id="divContatos">
 
+    </div>
+
+
+    <!-- Notificações -->
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <!-- Toast -->
+        <div id="notificacao" class="toast align-items-center text-white border-0" role="alert" aria-atomic="true">
+
+            <div class="toast-header p-0">
+                <div class="icone-notificacao"><i id="iconeNotificacao"></i></div>
+                <strong class="me-auto" id="tituloNotificacao">Bootstrap</strong>
+                <button type="button" class="btn-close m-2" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="mensagemNotificacao"></div>
+        </div>
     </div>
 </main>
