@@ -1,3 +1,71 @@
 <script>
-    
+    function criarTabelaContatos()
+    {
+        google.script.run.withSuccessHandler(
+            function(obj)
+            {
+                let tabela = document.getElementById('tabelaContatos');
+                if(tabela) tabela.remove();
+
+                tabela = document.createElement('table');
+                tabela.id = 'tabelaContatos';
+
+                let tabelaHeader = document.createElement('thead');
+                let tabelaBody = document.createElement('tbody');
+
+                for(let i = 0; i < obj.length; i++)
+                {
+                    let fila = document.createElement('tr');
+                    for(let j = 0; j < obj[i].length; j++)
+                    {
+                        let celula = document.createElement('td');
+                        celula.textContent = obj[i][j];
+                        fila.appendChild(celula); 
+                    }
+                    if(i == 0)
+                    {
+                        tabelaHeader.appendChild(fila);
+                        tabela.appendChild(tabelaHeader);
+                    }
+                    else
+                    {
+                        tabelaBody.appendChild(fila);
+                    } 
+                };
+
+            //     Array.from(obj).forEach((filaAtual, i) => 
+            //         {
+            //             let fila = document.createElement('tr');
+            //             filaAtual.forEach(celulaAtual => 
+            //                 {
+            //                     let celula = document.createElement('td');
+            //                     celula.textContent = celulaAtual;
+            //                     fila.appendChild(celula);
+            //                 });
+            //                 if(i == 0)
+            //                 {
+            //                     tabelaHeader.appendChild(fila);
+            //                     tabela.appendChild(tabelaHeader);
+            //                 }
+            //                 else
+            //                 {
+            //                 tabelaBody.appendChild(fila);
+            //                 }                   
+            //             });
+
+                     // Adicioona,ps o cabeçalho da tabela
+                     tabelaHeader.classList.add('table-dark');
+                    
+                     //Adicionamos o corpo da tabela
+                     tabela.appendChild(tabelaBody);
+
+                     //Adicionamos classes do bootstrap a tabela
+                     tabela.classList.add('table', 'table-striped', 'border', 'border-3', 'table-dark');
+
+                     //adicionamos a tabela na dic do html
+                     document.getElementById('divContatos').appendChild(tabela);
+
+             }
+        ).obterContatos();
+    }
 </script>
