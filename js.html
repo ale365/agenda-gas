@@ -1,4 +1,9 @@
 <script>
+    const NOTIFICACAO_OK = 1;
+    const NOTIFICACAO_DANGER = 2;
+    const NOTIFICACAO_WARNING = 3;
+
+
     function criarTabelaContatos()
     {
         let tabela = document.getElementById('tabelaContatos');
@@ -48,18 +53,19 @@
         tabela.appendChild(tabelaBody);
 
         //Adicionamos classes do bootstrap a tabela
-        tabela.classList.add('table', 'table-striped', 'border', 'border-3', 'table-dark');
+        tabela.classList.add('table', 'table-striped', 'border', 'border-4', 'table-dark', 'border-dark');
 
         //adicionamos a tabela na dic do html
         document.getElementById('divContatos').appendChild(tabela);
 
         // Mostrar notificação de OK
-        criarNorificacao(1, 'Contatos obtidos corretamente', 'Sucesso');
+        criarNorificacao(NOTIFICACAO_OK, 'Contatos obtidos corretamente', 'Sucesso');
     }
 
     function criarTabelaContatosError()
     {
         // Mostrar notificaç~cao de Erro
+        criarNorificacao(NOTIFICACAO_DANGER, 'Não pode ser lido os contatos', 'ERRO !!');
     }
 
     function criarNorificacao(tipo, mensagem, titulo)
@@ -72,13 +78,32 @@
         let notificacao = bootstrap.Toast.getOrCreateInstance(elementoNotificacao);
 
         // Editar a notificação
-        iconeNotificacao.className = '';
-        iconeNotificacao.classList.add('bi', 'bi-check-square');
         mensagemNotificacao.textContent = mensagem;
         tituloNotificacao.textContent = titulo;
-        elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-verde-escuro');
 
-        // Mostrar notificacao
+        switch (tipo) {
+            case NOTIFICACAO_OK:
+                iconeNotificacao.className = '';
+                iconeNotificacao.classList.add('bi', 'bi-check-square');
+                elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-verde-escuro');
+                break;
+
+            case NOTIFICACAO_DANGER:
+                iconeNotificacao.className = '';
+                iconeNotificacao.classList.add('bi', 'bi-bug');
+                elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-vermelho-escuro');
+                break;
+
+            case NOTIFICACAO_WARNING:
+                iconeNotificacao.className = '';
+                iconeNotificacao.classList.add('bi', 'bi-exclamation-square');
+                elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-amarelo-escuro');
+                break;
+        }
+
+
+
+                // Mostrar notificacao
         notificacao.show();
     }
 </script>
