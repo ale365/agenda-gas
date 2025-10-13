@@ -1,10 +1,14 @@
 <script>
     function criarTabelaContatos()
     {
-        let tabela = document.getElementById('tabelaContatos');
-        if(tabela) tabela.remove();
+        // Apagando a tabela se ela existir
+        removerTabelaContatos();
 
-        google.script.run.withSuccessHandler(criarTabelaContatosCorretamente)
+        // Criar Loader
+        criarLoader('divContatos');
+
+        google.script.run
+        .withSuccessHandler(criarTabelaContatosCorretamente)
         .withFailureHandler(criarTabelaContatosError)
         .obterContatos();
     }
@@ -55,12 +59,18 @@
 
         // Mostrar notificação de OK
         criarNorificacaoOk('Contatos obtidos corretamente', 'Sucesso');
+
+        //Eliminamos o loader
+        removerLoader();
     }
 
     function criarTabelaContatosError()
     {
         // Mostrar notificaç~cao de Erro
         criarNorificacaoError('Não pode ser lido os contatos', 'ERRO !!');
+
+        //Eliminamos o loader
+        removerLoader();
     }
 
 
@@ -117,5 +127,42 @@
     {
         let elementoNotificacao = document.getElementById('notificacao');
         elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(cor);
+    }
+
+
+    function criarLoader(elementoPai)
+    {
+        removerLoader();
+        let loader = document.createElement('div');
+        loader.id = 'loader';
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        loader.appendChild(document.createElement('div'));
+        return document.getElementById(elementoPai).appendChild(loader);
+    }
+
+    function criarLoaderBolinhas(elementoPai)
+    {
+        let loader = criarLoader(elementoPai);
+        loader.classList.add('lds-roller');
+    }
+
+    function criarLoaderBarrinhaCirculo(elementoPai)
+    {
+        let loader = criarLoader(elementoPai);
+        loader.classList.add('lds-ring');
+    }
+
+    function removerLoader()
+    {
+        let loader = document.getElementById('loader');
+        if(loader) loader.remove();
+    }
+
+    function removerTabelaContatos()
+    {
+        let tabela = document.getElementById('tabelaContatos');
+        if(tabela) tabela.remove();
     }
 </script>
