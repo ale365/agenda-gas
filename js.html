@@ -1,9 +1,4 @@
 <script>
-    const NOTIFICACAO_OK = 1;
-    const NOTIFICACAO_DANGER = 2;
-    const NOTIFICACAO_WARNING = 3;
-
-
     function criarTabelaContatos()
     {
         let tabela = document.getElementById('tabelaContatos');
@@ -59,51 +54,68 @@
         document.getElementById('divContatos').appendChild(tabela);
 
         // Mostrar notificação de OK
-        criarNorificacao(NOTIFICACAO_OK, 'Contatos obtidos corretamente', 'Sucesso');
+        criarNorificacaoOk('Contatos obtidos corretamente', 'Sucesso');
     }
 
     function criarTabelaContatosError()
     {
         // Mostrar notificaç~cao de Erro
-        criarNorificacao(NOTIFICACAO_DANGER, 'Não pode ser lido os contatos', 'ERRO !!');
+        criarNorificacaoError('Não pode ser lido os contatos', 'ERRO !!');
     }
 
-    function criarNorificacao(tipo, mensagem, titulo)
+
+
+
+    function criarNotificacao(mensagem, titulo)
     {
-        // Obter dados
-        let mensagemNotificacao = document.getElementById('mensagemNotificacao');
-        let tituloNotificacao = document.getElementById('tituloNotificacao');
+        document.getElementById('mensagemNotificacao').textContent = mensagem;
+        document.getElementById('tituloNotificacao').textContent = titulo;
         let elementoNotificacao = document.getElementById('notificacao');
-        let iconeNotificacao = document.getElementById('iconeNotificacao');
-        let notificacao = bootstrap.Toast.getOrCreateInstance(elementoNotificacao);
+        bootstrap.Toast.getOrCreateInstance(elementoNotificacao).show();
+    }
 
-        // Editar a notificação
-        mensagemNotificacao.textContent = mensagem;
-        tituloNotificacao.textContent = titulo;
+    function criarNorificacaoOk(mensagem, titulo)
+    {
+        criarNotificacao(mensagem, titulo);
+        criarIconeOk(mensagem, titulo);
+        criarCorNotificacao('--cor-verde-escuro');
+    }
 
-        switch (tipo) {
-            case NOTIFICACAO_OK:
-                iconeNotificacao.className = '';
-                iconeNotificacao.classList.add('bi', 'bi-check-square');
-                elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-verde-escuro');
-                break;
+    function criarNorificacaoError(mensagem, titulo)
+    {
+        criarNotificacao(mensagem, titulo);
+        criarIconeError(mensagem, titulo);
+        criarCorNotificacao('--cor-vermelho-escuro');
+    }
 
-            case NOTIFICACAO_DANGER:
-                iconeNotificacao.className = '';
-                iconeNotificacao.classList.add('bi', 'bi-bug');
-                elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-vermelho-escuro');
-                break;
+    function criarNorificacaoAdvertencia(mensagem, titulo)
+    {
+        criarNotificacao(mensagem, titulo);
+        criarIconeAdvertencia(mensagem, titulo);
+        criarCorNotificacao('--cor-amarelo-escuro');
+    }
 
-            case NOTIFICACAO_WARNING:
-                iconeNotificacao.className = '';
-                iconeNotificacao.classList.add('bi', 'bi-exclamation-square');
-                elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cor-amarelo-escuro');
-                break;
-        }
+    function criarIconeOk(mensagem, titulo)
+    {
+        document.getElementById('iconeNotificacao').className = '';
+        document.getElementById('iconeNotificacao').classList.add('bi', 'bi-check-square');
+    }
 
+    function criarIconeError(mensagem, titulo)
+    {
+        document.getElementById('iconeNotificacao').className = '';
+        document.getElementById('iconeNotificacao').classList.add('bi', 'bi-bug');
+    }
 
+    function criarIconeAdvertencia(mensagem, titulo)
+    {
+        document.getElementById('iconeNotificacao').className = '';
+        document.getElementById('iconeNotificacao').classList.add('bi', 'bi-exclamation-square');
+    }
 
-                // Mostrar notificacao
-        notificacao.show();
+    function criarCorNotificacao(cor)
+    {
+        let elementoNotificacao = document.getElementById('notificacao');
+        elementoNotificacao.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(cor);
     }
 </script>
