@@ -1,8 +1,15 @@
+const FOLHA = SpreadsheetApp.openById('1sHpJLRY47dqmYNVvVgLDdDeree61VXQ3nRw2usVa1TI').getActiveSheet();
+
 function doGet()
 {
     return HtmlService.createTemplateFromFile('web').evaluate().setTitle('Agenda Google Apps Script');
 }
 
+function doPost(dados)
+{
+    inserirContato(dados.parameter.nome, dados.parameter.email);
+    return HtmlService.createTemplateFromFile('web').evaluate().setTitle('Agenda Google Apps Script');
+}
 
 function obterDadosHtml(nome)
 {
@@ -12,7 +19,10 @@ function obterDadosHtml(nome)
 
 function obterContatos()
 {
-    let folha = SpreadsheetApp.openById('1sHpJLRY47dqmYNVvVgLDdDeree61VXQ3nRw2usVa1TI').getActiveSheet();
-    let dados = folha.getDataRange().getValues();
-    return dados;
+    return FOLHA.getDataRange().getValues();
+}
+
+function inserirContato(nome, email)
+{
+    FOLHA.appendRow([nome, email]);
 }

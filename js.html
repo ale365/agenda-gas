@@ -1,4 +1,49 @@
 <script>
+    function inserirContato()
+    {
+        // Obter dados
+        let nome = document.getElementById('nome').value;
+        let email = document.getElementById('email').value;
+
+        // Apagando a tabela se ela existir
+        removerTabelaContatos();
+
+        // Criar Loader
+        criarLoader('divContatos');
+
+        google.script.run
+        .withSuccessHandler(contatoInseridoCorretamente)
+        .withFailureHandler(contatoInseridoError)
+        .inserirContato(nome, email);
+    }
+
+    function contatoInseridoCorretamente()
+    {
+        // Eliminamos os dados de Input
+        document.getElementById('nome').value = '';
+        document.getElementById('email').value = '';
+
+        // Mostra Notificacao
+        criarNotificacaoOk('Contato inserido corretamente', 'CONTATO OK');
+
+        //Eliminamos o loader
+        removerLoader();
+
+      // Mostr5amos a tabela de contatos
+      criarTabelaContatos();
+    }
+
+    function contatoInseridoError()
+    {
+      criarNorificacaoError('Não podemos inserir o Contato', 'ERRO !!');
+
+      //Eliminamos o loader
+      removerLoader();
+
+      // Mostr5amos a tabela de contatos
+      criarTabelaContatos();
+    }
+
     function criarTabelaContatos()
     {
         // Apagando a tabela se ela existir
@@ -58,7 +103,7 @@
         document.getElementById('divContatos').appendChild(tabela);
 
         // Mostrar notificação de OK
-        criarNorificacaoOk('Contatos obtidos corretamente', 'Sucesso');
+        criarNotificacaoOk('Contatos obtidos corretamente', 'Sucesso');
 
         //Eliminamos o loader
         removerLoader();
@@ -84,7 +129,7 @@
         bootstrap.Toast.getOrCreateInstance(elementoNotificacao).show();
     }
 
-    function criarNorificacaoOk(mensagem, titulo)
+    function criarNotificacaoOk(mensagem, titulo)
     {
         criarNotificacao(mensagem, titulo);
         criarIconeOk(mensagem, titulo);

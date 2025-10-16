@@ -1,8 +1,21 @@
 <main>
+    <div class="d-flex justify-content-center my-3">
+        <!-- Formulário -->
+        <!-- <form action="https://script.google.com/macros/s/AKfycbx_JBOJ8U_hhzrPa2nwVtt8O54_1oPDfxqWX1lWfPyw/dev" method="post" id="formulario"> -->
+        <form onsubmit="inserirContato()" method="dialog" id="formulario">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Insira o nome do Contato</label>
+                <input type="text" class="form-control" id="nome" name="nome">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Insira seu melhor e-mail</label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
 
-    <!-- Botoes -->
-    <div class="d-flex justify-content-center mb-4">
-        <button class="btn btn-success m-3" onclick="criarTabelaContatos()">Mostrar contatos</button>
+            <!-- Botoes -->
+            <button type="button" class="btn btn-success m-3" onclick="criarTabelaContatos()">Mostrar contatos</button>
+            <button type="submit" class="btn btn-primary">Criar contato</button>
+        </form>
     </div>
 
     <!-- Tabela de contatos -->
