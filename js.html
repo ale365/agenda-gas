@@ -5,11 +5,15 @@
         let nome = document.getElementById('nome').value;
         let email = document.getElementById('email').value;
 
+        // Fechar Modal
+        bootstrap.Modal.getInstance(document.getElementById('criarContatoModal')).hide();
+
         // Apagando a tabela se ela existir
         removerTabelaContatos();
 
         // Criar Loader
-        criarLoader('divContatos');
+        //criarLoader('divContatos');
+        criarLoaderBolinhas('divContatos');
 
         google.script.run
         .withSuccessHandler(contatoInseridoCorretamente)
@@ -50,7 +54,8 @@
         removerTabelaContatos();
 
         // Criar Loader
-        criarLoader('divContatos');
+        //criarLoader('divContatos');
+        criarLoaderBolinhas('divContatos');
 
         google.script.run
         .withSuccessHandler(criarTabelaContatosCorretamente)
