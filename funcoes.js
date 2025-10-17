@@ -22,7 +22,7 @@ function obterContatos()
     return FOLHA.getDataRange().getValues();
 }
 
-function inserirContato(nome, email)
+function inserirContato(nome, sobrenome, email, telef)
 {
-    FOLHA.appendRow([nome, email]);
+    FOLHA.appendRow([nome, sobrenome, email, telef]);
 }

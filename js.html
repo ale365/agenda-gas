@@ -3,7 +3,9 @@
     {
         // Obter dados
         let nome = document.getElementById('nome').value;
+        let sobrenome = document.getElementById('sobrenome').value;
         let email = document.getElementById('email').value;
+        let telef = document.getElementById('telef').value;
 
         // Fechar Modal
         bootstrap.Modal.getInstance(document.getElementById('criarContatoModal')).hide();
@@ -18,14 +20,16 @@
         google.script.run
         .withSuccessHandler(contatoInseridoCorretamente)
         .withFailureHandler(contatoInseridoError)
-        .inserirContato(nome, email);
+        .inserirContato(nome, sobrenome, email, telef);
     }
 
     function contatoInseridoCorretamente()
     {
         // Eliminamos os dados de Input
         document.getElementById('nome').value = '';
+        document.getElementById('sobrenome').value = '';
         document.getElementById('email').value = '';
+        document.getElementById('telef').value = '';
 
         // Mostra Notificacao
         criarNotificacaoOk('Contato inserido corretamente', 'CONTATO OK');
