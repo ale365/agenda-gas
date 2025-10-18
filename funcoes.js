@@ -26,3 +26,8 @@ function inserirContato(nome, sobrenome, email, telef)
 {
     FOLHA.appendRow([nome, sobrenome, email, telef]);
 }
+
+function apagarContato(numFila)
+{
+    FOLHA.deleteRow(numFila);
+}

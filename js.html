@@ -43,7 +43,7 @@
 
     function contatoInseridoError()
     {
-      criarNorificacaoError('Não podemos inserir o Contato', 'ERRO !!');
+      criarNotificacaoError('Não podemos inserir o Contato', 'ERRO !!');
 
       //Eliminamos o loader
       removerLoader();
@@ -69,6 +69,16 @@
 
     function criarTabelaContatosCorretamente(obj)
     {
+        // Debug: ver o que o servidor retornou
+        console.log('obterContatos result:', obj);
+
+        // Validações defensivas: garantir que obj é um array com ao menos uma linha (header)
+        if(!obj || !Array.isArray(obj) || obj.length === 0 || !Array.isArray(obj[0]))
+        {
+            removerLoader();
+            criarNotificacaoAdvertencia('Nenhum contato encontrado ou formato inválido retornado pelo servidor', 'Atenção');
+            return;
+        }
         let tabela = document.createElement('table');
         tabela.id = 'tabelaContatos';
 
@@ -83,6 +93,14 @@
             celula.textContent = obj[0][i];
             primeiraFila.appendChild(celula);   
         }
+
+        // Adicionar coluna de opcoes
+        let celulaOpcoes = document.createElement('td');
+        celulaOpcoes.textContent = 'Opções';
+        celulaOpcoes.classList.add('text-center');
+        primeiraFila.appendChild(celulaOpcoes);
+
+        // Adicionar a Fila ao Header da tabela
         tabelaHeader.appendChild(primeiraFila);
         tabela.appendChild(tabelaHeader);
 
@@ -96,6 +114,9 @@
                 celula.textContent = obj[i][j];
                 fila.appendChild(celula); 
             }
+            //Adicionar botoes de editar e eliminar
+            fila.appendChild(criarBotoesOpcoes(i+1));
+
             tabelaBody.appendChild(fila);
         };
 
@@ -118,10 +139,85 @@
         removerLoader();
     }
 
+    function criarBotoesOpcoes(numFila)
+    {
+        // Criar celula
+        let celula = document.createElement('td');
+        celula.classList.add('text-center');
+
+        // Criar botao de apagar
+        let botaoApagar = document.createElement('button');
+        botaoApagar.onclick = () => apagarContato(numFila);
+        botaoApagar.classList.add('btn', 'btn-danger', 'm-1');
+        //botaoApagar.textContent = 'Apagar';
+
+        // Icone Apagar
+        let iconeApagar = document.createElement('i');
+        iconeApagar.classList.add('bi', 'bi-trash');
+        botaoApagar.appendChild(iconeApagar);
+
+        // Criar botao de editar
+        let botaoEditar = document.createElement('button');
+
+        //botaoEditar.onclick = () => EditarContato(numFila);
+        botaoEditar.classList.add('btn', 'btn-warning', 'm-1');
+        //botaoEditar.textContent = 'Editar';
+
+        // Icone Editar
+        let iconeEditar = document.createElement('i');
+        iconeEditar.classList.add('bi', 'bi-pencil-square');
+        botaoEditar.appendChild(iconeEditar);        
+
+        // Adicionar botoes na Celula
+        celula.appendChild(botaoApagar);
+        celula.appendChild(botaoEditar);
+
+        // Adicionar celula na Fila
+        return celula;
+    }
+
+    function apagarContato(numFila)
+    {
+        // Apagando a tabela se ela existir
+        removerTabelaContatos();
+
+        // Criar Loader
+        //criarLoader('divContatos');
+        criarLoaderBolinhas('divContatos');
+
+        google.script.run
+        .withSuccessHandler(contatoApagadoCorretamente)
+        .withFailureHandler(contatoApagadoError)
+        .apagarContato(numFila);
+    }
+
+    function contatoApagadoCorretamente()
+    {
+        // Mostra Notificacao
+        criarNotificacaoOk('Contato apagado corretamente', 'CONTATO APAGADO');
+
+        //Eliminamos o loader
+        removerLoader();
+
+        // Mostr5amos a tabela de contatos
+        criarTabelaContatos();
+    }
+
+    function contatoApagadoError()
+    {
+        criarNotificacaoError('Não podemos apagar o Contato', 'ERRO !!');
+    
+        //Eliminamos o loader
+        removerLoader();
+    
+        // Mostr5amos a tabela de contatos
+        criarTabelaContatos();
+    }
+
     function criarTabelaContatosError()
     {
         // Mostrar notificaç~cao de Erro
-        criarNorificacaoError('Não pode ser lido os contatos', 'ERRO !!');
+        criarNotificacaoError('Não pode ser lido os contatos', 'ERRO !!');
 
         //Eliminamos o loader
         removerLoader();
@@ -145,14 +241,14 @@
         criarCorNotificacao('--cor-verde-escuro');
     }
 
-    function criarNorificacaoError(mensagem, titulo)
+    function criarNotificacaoError(mensagem, titulo)
     {
         criarNotificacao(mensagem, titulo);
         criarIconeError(mensagem, titulo);
         criarCorNotificacao('--cor-vermelho-escuro');
     }
 
-    function criarNorificacaoAdvertencia(mensagem, titulo)
+    function criarNotificacaoAdvertencia(mensagem, titulo)
     {
         criarNotificacao(mensagem, titulo);
         criarIconeAdvertencia(mensagem, titulo);
