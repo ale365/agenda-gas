@@ -114,8 +114,8 @@
                 celula.textContent = obj[i][j];
                 fila.appendChild(celula); 
             }
-            //Adicionar botoes de editar e eliminar
-            fila.appendChild(criarBotoesOpcoes(i+1));
+            // Adicionar botoes de editar e eliminar
+            fila.appendChild(criarBotoesOpcoes(i+1, obj[i])); // i+1 porque o indice 0 é o header
 
             tabelaBody.appendChild(fila);
         };
@@ -139,13 +139,15 @@
         removerLoader();
     }
 
-    function criarBotoesOpcoes(numFila)
+    function criarBotoesOpcoes(numFila, dadosContato)
     {
         // Criar celula
         let celula = document.createElement('td');
         celula.classList.add('text-center');
 
+        // *********************************************//
         // Criar botao de apagar
+        // *********************************************//
         let botaoApagar = document.createElement('button');
         botaoApagar.onclick = () => apagarContato(numFila);
         botaoApagar.classList.add('btn', 'btn-danger', 'm-1');
@@ -156,10 +158,11 @@
         iconeApagar.classList.add('bi', 'bi-trash');
         botaoApagar.appendChild(iconeApagar);
 
+        // *********************************************//
         // Criar botao de editar
+        // *********************************************//
         let botaoEditar = document.createElement('button');
-
-        //botaoEditar.onclick = () => EditarContato(numFila);
+        botaoEditar.onclick = () => abrirModalEditarContato(numFila, dadosContato);
         botaoEditar.classList.add('btn', 'btn-warning', 'm-1');
         //botaoEditar.textContent = 'Editar';
 
@@ -174,6 +177,104 @@
 
         // Adicionar celula na Fila
         return celula;
+    }
+
+    function abrirModalCriarContato()
+    {
+        // Botao de Criar Contato
+        let botao = document.getElementById('botaoCriarModificar');
+        botao.textContent = 'Criar contato';
+
+        //Alterar o Titulo do Modal
+        document.getElementById('tituloModal').textContent = 'Novo Contato';
+        botao.classList = '';
+        botao.classList.add('btn', 'btn-success');
+
+        // Modificar Submit
+        document.getElementById('formulario').onsubmit = () => inserirContato();
+
+        // Limpar dados do formulario
+        document.getElementById('nome').value = '';
+        document.getElementById('sobrenome').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('telef').value = '';
+
+        // Abrir modal
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('criarContatoModal')).show();
+    }
+
+    function abrirModalEditarContato(numFila, dadosContato)
+    {
+        // Botao de Editar Contato
+        let botao = document.getElementById('botaoCriarModificar');
+        botao.textContent = 'Salvar Contato';
+
+        //Alterar o Titulo do Modal
+        document.getElementById('tituloModal').textContent = 'Editar Contato';
+        botao.classList = '';
+        botao.classList.add('btn', 'btn-warning');
+
+        // Modificar Submit: prevenir envio padrão e chamar editarContato com o número correto
+        document.getElementById('formulario').onsubmit = function(e){
+            e.preventDefault();
+            editarContato(numFila);
+        };
+
+        // Obter dados do contato
+        document.getElementById('nome').value = dadosContato[0];
+        document.getElementById('sobrenome').value = dadosContato[1];
+        document.getElementById('email').value = dadosContato[2];
+        document.getElementById('telef').value = dadosContato[3];
+
+        // Abrir modal
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('criarContatoModal')).show();
+    }
+
+    function editarContato(numFila)
+    {
+        // Fechar Modal
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('criarContatoModal')).hide();
+
+        // Obter dados atraves do formulario
+        let nome = document.getElementById('nome').value;
+        let sobrenome = document.getElementById('sobrenome').value;
+        let email = document.getElementById('email').value;
+        let telef = document.getElementById('telef').value;
+
+        // Apagando a tabela se ela existir
+        removerTabelaContatos();
+
+        // Criar Loader
+        //criarLoader('divContatos');
+        criarLoaderBolinhas('divContatos');
+
+        google.script.run
+        .withSuccessHandler(contatoEditarCorretamente)
+        .withFailureHandler(contatoEditarError)
+        .editarContato(numFila, {nome, sobrenome, email, telef});
+    }
+
+    function contatoEditarCorretamente()
+    {
+        // Mostra Notificacao
+        criarNotificacaoOk('Contato Editado corretamente', 'EDITADO');
+
+        //Eliminamos o loader
+        removerLoader();
+
+        // Mostr5amos a tabela de contatos
+        criarTabelaContatos();
+    }
+
+    function contatoEditarError()
+    {
+        criarNotificacaoError('Não podemos ser editado o Contato', 'ERRO !!');
+    
+        //Eliminamos o loader
+        removerLoader();
+    
+        // Mostr5amos a tabela de contatos
+        criarTabelaContatos();
     }
 
     function apagarContato(numFila)

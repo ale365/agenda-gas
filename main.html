@@ -19,7 +19,7 @@
 
         <!-- Botoes Superiores -->
         <button type="button" class="btn btn-success m-2" onclick="criarTabelaContatos()">Mostrar contatos</button>
-        <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#criarContatoModal">
+        <button type="button" class="btn btn-primary m-2" onclick="abrirModalCriarContato()">
             Novo Contato
         </button>
     </div>
@@ -54,7 +54,7 @@
         <div class="modal-lg modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="tituloCriarContatoModal">Novo Contato</h1>
+                    <h1 class="modal-title fs-5" id="tituloModal">Novo Contato</h1>
                 </div>
 
                 <!-- Formulário de criar contato -->
@@ -85,7 +85,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Criar contato</button>
+                        <button id="botaoCriarModificar" type="submit" class="btn btn-success">Criar contato</button>
                     </div>
                 </form>
             </div>

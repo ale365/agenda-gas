@@ -31,3 +31,10 @@ function apagarContato(numFila)
 {
     FOLHA.deleteRow(numFila);
 }
+
+function editarContato(numFila, dados)
+{
+    // numFila é o número da linha na planilha (1-based)
+    let celulas = FOLHA.getRange(numFila, 1, 1, 4); // linha, coluna A=1, 1 linha, 4 colunas (A:D)
+    celulas.setValues([[dados.nome, dados.sobrenome, dados.email, dados.telef]]);
+}
